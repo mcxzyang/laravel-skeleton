@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the ${PROJECT_NAME}
+ * This file is part of the ${PROJECT_NAME}.
  *
  * (c) cherrybeal <mcxzyang@gmail.com>
  *
@@ -27,6 +27,7 @@ class UsersController extends Controller
     public function show(User $user)
     {
         $this->authorize('view', $user);
+
         return UserResource::make($user);
     }
 }
