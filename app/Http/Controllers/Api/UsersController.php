@@ -21,7 +21,7 @@ class UsersController extends Controller
     {
         $list = User::query()->latest()->paginate($request->input('page', 10));
 
-            return UserResource::collection($list);
+        return UserResource::collection($list);
     }
 
     public function show(User $user)
