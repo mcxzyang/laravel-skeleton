@@ -18,8 +18,8 @@ use Illuminate\Http\Request;
 class UsersController extends Controller
 {
     public function index(Request $request)
-    {
-        $list = User::query()->latest()->paginate($request->input('page', 10));
+    {$list = User::query()->latest()->paginate($request->input('page', 10));
+
         return UserResource::collection($list);
     }
 
