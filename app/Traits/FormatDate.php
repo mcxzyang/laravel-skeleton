@@ -2,7 +2,8 @@
 
 namespace App\Traits;
 
-trait FormatDate {
+trait FormatDate
+{
     /**
      * Prepare a date for array / JSON serialization.
      *

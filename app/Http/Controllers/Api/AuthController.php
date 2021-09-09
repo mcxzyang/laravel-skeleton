@@ -10,7 +10,6 @@
 
 namespace App\Http\Controllers\Api;
 
-
 use App\Exceptions\InvalidRequestException;
 use App\Http\Controllers\Controller;
 use App\Models\User;

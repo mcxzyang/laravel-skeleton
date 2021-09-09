@@ -12,7 +12,10 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable, FormatDate;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
+    use FormatDate;
 
     /**
      * The attributes that are mass assignable.
@@ -66,7 +69,7 @@ class User extends Authenticatable implements JWTSubject
 
     protected static function booted()
     {
-        static::saving(function(User $user){
+        static::saving(function (User $user) {
             if (\Hash::needsRehash($user->password)) {
                 $user->password = \bcrypt($user->password);
             }

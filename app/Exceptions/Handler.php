@@ -37,15 +37,14 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-
         });
 
-        $this->renderable(function(ValidationException $e) {
+        $this->renderable(function (ValidationException $e) {
             $errors = $e->errors();
             throw new InvalidRequestException(is_array($errors) ? array_values($errors)[0][0] : $errors);
         });
 
-        $this->renderable(function(AccessDeniedHttpException $e){
+        $this->renderable(function (AccessDeniedHttpException $e) {
             throw new InvalidRequestException('权限错误');
         });
     }
