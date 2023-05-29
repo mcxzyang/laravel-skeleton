@@ -18,15 +18,19 @@ class RequestLogMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        $log = new RequestLog([
-            'url' => $request->fullUrl(),
-            'method' => $request->method(),
-            'ip' => $request->getClientIp(),
-            'params' => json_encode($request->all(), JSON_UNESCAPED_UNICODE)
-        ]);
-        $log->save();
+        $environment = app()->environment();
+        if ($environment === 'production') {
+            $log = new RequestLog([
+                'url' => $request->fullUrl(),
+                'method' => $request->method(),
+                'ip' => $request->getClientIp(),
+                'params' => json_encode($request->all(), JSON_UNESCAPED_UNICODE)
+            ]);
+            $log->save();
+        }
+
         $response = $next($request);
-        if ($rep = $response->getContent()) {
+        if ($environment === 'production' && $rep = $response->getContent()) {
             $log->update([
                 'response_params' => $rep,
                 'user_id' => $request->user() ? $request->user()->id : 0
