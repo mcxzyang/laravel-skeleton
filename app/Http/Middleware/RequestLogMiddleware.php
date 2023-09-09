@@ -10,7 +10,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\RequestLog;
+use App\Jobs\RequestLogJob;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -19,22 +19,18 @@ class RequestLogMiddleware
     public function handle(Request $request, Closure $next)
     {
         $environment = app()->environment();
+
+        $response = $next($request);
+
         if ($environment === 'production') {
-            $log = new RequestLog([
+            dispatch(new RequestLogJob([
                 'url' => $request->fullUrl(),
                 'method' => $request->method(),
                 'ip' => $request->getClientIp(),
-                'params' => json_encode($request->all(), JSON_UNESCAPED_UNICODE)
-            ]);
-            $log->save();
-        }
-
-        $response = $next($request);
-        if ($environment === 'production' && $rep = $response->getContent()) {
-            $log->update([
-                'response_params' => $rep,
-                'user_id' => $request->user() ? $request->user()->id : 0
-            ]);
+                'params' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
+                'response_params' => $response->getContent(),
+                'user_id' => $request->user() ? $request->user()->id : 0,
+            ]));
         }
         return $response;
     }

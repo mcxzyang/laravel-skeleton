@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use App\Traits\FormatDate;
+use EloquentFilter\Filterable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class AdminUser extends Authenticatable implements JWTSubject
 {
-    use HasFactory;
     use FormatDate;
+    use Filterable;
 
     protected $fillable = [
         'username', 'name', 'avatar', 'password', 'is_super_admin', 'status'

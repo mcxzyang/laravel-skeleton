@@ -11,9 +11,9 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AdminUserResource;
 use App\Models\AdminUser;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class AuthController extends Controller
 {
@@ -21,7 +21,10 @@ class AuthController extends Controller
     {
         $params = $this->validate($request, [
             'username' => 'required',
-            'password' => 'required'
+            'password' => 'required',
+            'captcha' => 'required|captcha_api:'.request('key').',math'
+        ], [
+            'captcha.captcha_api' => '验证码错误'
         ]);
         $user = AdminUser::query()->where(['username' => $params['username']])->first();
         if (!$user) {
@@ -48,7 +51,7 @@ class AuthController extends Controller
     {
         $user = auth('admin')->user();
 
-        return $this->success(new JsonResource($user));
+        return $this->success(new AdminUserResource($user));
     }
 
     public function logout()

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\Traits;
 
-use Symfony\Component\HttpFoundation\Response as FoundationResponse;
 use Response;
+use Symfony\Component\HttpFoundation\Response as FoundationResponse;
 
 trait ApiResponseTraits
 {

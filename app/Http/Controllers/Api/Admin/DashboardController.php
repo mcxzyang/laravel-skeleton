@@ -75,4 +75,9 @@ class DashboardController extends Controller
         ];
         return $this->success($data);
     }
+
+    public function announcement()
+    {
+        return $this->success([]);
+    }
 }

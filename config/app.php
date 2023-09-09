@@ -15,7 +15,7 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
-    'pageSize' => 10,
+    'size' => 10,
 
     'apiKeyName' => 'x-api-key',
 
