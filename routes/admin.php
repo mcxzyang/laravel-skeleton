@@ -20,6 +20,7 @@ Route::get('/common/captcha/img', [CommonController::class, 'captcha']);
 Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::patch('/auth/updatePassword', [AuthController::class, 'updatePassword']);
 
     // Dashboard 统计
     Route::get('/dashboard/contentData', [DashboardController::class, 'contentData']);

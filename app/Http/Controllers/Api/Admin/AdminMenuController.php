@@ -54,7 +54,8 @@ class AdminMenuController extends Controller
 
         $query = AdminMenu::query()
             ->orderBy('sort')
-            ->where('status', 1);
+            ->where('status', 1)
+            ->where('type', 1);
         if (!$adminUser->is_super_admin) {
             $menuIds = AdminRoleMenu::query()->whereIn('role_id', $adminUser->roles)->pluck('menu_id');
             $query->whereIn('id', $menuIds);

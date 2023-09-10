@@ -12,8 +12,11 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AdminUserResource;
+use App\Models\AdminMenu;
+use App\Models\AdminRoleMenu;
 use App\Models\AdminUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -50,8 +53,39 @@ class AuthController extends Controller
     public function me()
     {
         $user = auth('admin')->user();
+        $user->permissions = ['*'];
+        if (!$user->is_super_admin) {
 
+            $menuIds = AdminRoleMenu::query()->whereIn('role_id', $user->roles)->pluck('menu_id');
+
+            $permissions = AdminMenu::query()
+                ->orderBy('sort')
+                ->where('type', 2)
+                ->where('status', 1)
+                ->whereIn('id', $menuIds)
+                ->pluck('permission');
+            $user->permissions = $permissions;
+        }
         return $this->success(new AdminUserResource($user));
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $params = $this->validate($request, [
+            'password' => 'required',
+            'new_password' => 'required|confirmed',
+            'new_password_confirmation' => 'required'
+        ]);
+
+        $user = auth('admin')->user();
+
+        if (!Hash::check($params['password'], $user->password)) {
+            return $this->failed('旧密码错误');
+        }
+        $user->password = $params['new_password'];
+        $user->save();
+
+        return $this->message('操作成功');
     }
 
     public function logout()
