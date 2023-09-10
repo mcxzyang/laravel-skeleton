@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Traits\FormatDate;
 use Illuminate\Database\Eloquent\Model;
 
-class AdminRoleMenus extends Model
+class AdminRoleMenu extends Model
 {
     use FormatDate;
 

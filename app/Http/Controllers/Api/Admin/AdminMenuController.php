@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdminMenu;
+use App\Models\AdminRoleMenu;
 use Illuminate\Http\Request;
 
 class AdminMenuController extends Controller
@@ -50,16 +51,15 @@ class AdminMenuController extends Controller
     public function route()
     {
         $adminUser = auth('admin')->user();
-        if ($adminUser->is_super_admin) {
-            $list = AdminMenu::query()
-                ->orderBy('sort')
-                ->where('status', 1)
-                ->get();
-        } else {
-            $list = $adminUser->adminRoles->flatMap(function ($role) {
-                return $role->menus;
-            })->sort()->where('status', 1)->values();
+
+        $query = AdminMenu::query()
+            ->orderBy('sort')
+            ->where('status', 1);
+        if (!$adminUser->is_super_admin) {
+            $menuIds = AdminRoleMenu::query()->whereIn('role_id', $adminUser->roles)->pluck('menu_id');
+            $query->whereIn('id', $menuIds);
         }
+        $list = $query->get();
 
         return $this->success($this->getRouteTree($list));
     }
