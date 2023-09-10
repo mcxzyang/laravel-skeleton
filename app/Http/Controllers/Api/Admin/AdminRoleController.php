@@ -39,7 +39,7 @@ class AdminRoleController extends Controller
 
     public function update(Request $request, AdminRole $adminRole)
     {
-        $params = $request->only(['name', 'code', 'menu_ids', 'description']);
+        $params = $request->only(['name', 'code', 'menu_ids', 'description', 'status']);
 
         $adminRole->fill($params);
         $adminRole->save();

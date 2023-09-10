@@ -55,7 +55,6 @@ class AuthController extends Controller
         $user = auth('admin')->user();
         $user->permissions = ['*'];
         if (!$user->is_super_admin) {
-
             $menuIds = AdminRoleMenu::query()->whereIn('role_id', $user->roles)->pluck('menu_id');
 
             $permissions = AdminMenu::query()

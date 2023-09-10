@@ -48,7 +48,7 @@ class AdminUserController extends Controller
             'username' => 'required',
             'name' => 'required',
         ]);
-        $params = $request->only(['username', 'name', 'password', 'roles']);
+        $params = $request->only(['username', 'name', 'password', 'roles', 'status', 'is_super_admin']);
         $adminUserResult = AdminUser::query()->where(['username' => $params['username']])->where(
             'id',
             '!=',
