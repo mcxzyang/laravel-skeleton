@@ -20,6 +20,8 @@ class AdminUser extends Authenticatable implements JWTSubject
         'password'
     ];
 
+    protected $appends = ['roles', 'role_names'];
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -42,5 +44,20 @@ class AdminUser extends Authenticatable implements JWTSubject
                 $user->password = \bcrypt($user->password);
             }
         });
+    }
+
+    public function adminRoles()
+    {
+        return $this->belongsToMany(AdminRole::class, 'admin_user_roles', 'admin_user_id', 'role_id');
+    }
+
+    public function getRolesAttribute()
+    {
+        return $this->adminRoles()->pluck('role_id');
+    }
+
+    public function getRoleNamesAttribute()
+    {
+        return $this->adminRoles()->pluck('name');
     }
 }

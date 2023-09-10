@@ -30,10 +30,14 @@ class AdminUserController extends Controller
             'username' => 'required|unique:admin_users,username',
             'name' => 'required',
         ]);
-        $params = $request->only(['username', 'name', 'password']);
+        $params = $request->only(['username', 'name', 'password', 'roles']);
 
         $adminUser->fill($params);
         $adminUser->save();
+
+        if (isset($params['roles']) && count($params['roles'])) {
+            $adminUser->adminRoles()->sync($params['roles']);
+        }
 
         return $this->message('操作成功');
     }
@@ -44,7 +48,7 @@ class AdminUserController extends Controller
             'username' => 'required',
             'name' => 'required',
         ]);
-        $params = $request->only(['username', 'name', 'password']);
+        $params = $request->only(['username', 'name', 'password', 'roles']);
         $adminUserResult = AdminUser::query()->where(['username' => $params['username']])->where(
             'id',
             '!=',
@@ -56,6 +60,10 @@ class AdminUserController extends Controller
         }
         $adminUser->fill($params);
         $adminUser->save();
+
+        if (isset($params['roles'])) {
+            $adminUser->adminRoles()->sync($params['roles'] ?: []);
+        }
 
         return $this->message('操作成功');
     }

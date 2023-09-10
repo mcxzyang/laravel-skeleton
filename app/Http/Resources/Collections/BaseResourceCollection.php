@@ -10,7 +10,9 @@ class BaseResourceCollection extends ResourceCollection
 
     public function __construct($resource)
     {
-        $this->total = $resource->total();
+        if (!request()->has('paging') || request('paging') > 0) {
+            $this->total = $resource->total();
+        }
 
         parent::__construct($resource);
     }
@@ -24,19 +26,12 @@ class BaseResourceCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return [
-            'list' => $this->collection,
-            'total' => $this->total
-        ];
+        if (!request()->has('paging') || request('paging') > 0) {
+            return [
+                'list' => $this->collection,
+                'total' => $this->total
+            ];
+        }
+        return parent::toArray($request);
     }
-
-//    public function paginationInformation($request, $paginated, $default): array
-//    {
-//        return [
-//            'page' => $paginated['current_page'],
-//            'per_page' => $paginated['per_page'],
-//            'total' => $paginated['total'],
-//            'total_page' => $paginated['last_page'],
-//        ];
-//    }
 }

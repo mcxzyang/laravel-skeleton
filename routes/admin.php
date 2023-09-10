@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\Api\Admin\AdminMenuController;
+use App\Http\Controllers\Api\Admin\AdminRoleController;
 use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\Admin\AuthController;
 use App\Http\Controllers\Api\Admin\CommonController;
@@ -15,20 +16,25 @@ Route::post('/tools/uploadPic', [ToolsController::class, 'uploadPic']);
 
 Route::get('/common/captcha/img', [CommonController::class, 'captcha']);
 
-Route::get('/adminMenu/list/route', [AdminMenuController::class, 'route']);
-
 
 Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 
+    // Dashboard 统计
     Route::get('/dashboard/contentData', [DashboardController::class, 'contentData']);
     Route::get('/dashboard/popular', [DashboardController::class, 'popular']);
     Route::get('/dashboard/announcement', [DashboardController::class, 'announcement']);
 
-    Route::resource('/adminUser', AdminUserController::class);
+    // 权限管理
     Route::get('/adminUser/list/export', [AdminUserController::class, 'export']);
 
     Route::resource('/adminMenu', AdminMenuController::class);
     Route::get('/adminMenu/list/tree', [AdminMenuController::class, 'tree']);
+    Route::get('/adminMenu/list/route', [AdminMenuController::class, 'route']);
+
+    Route::resource('/adminUser', AdminUserController::class);
+
+    Route::resource('/adminRole', AdminRoleController::class);
+
 });

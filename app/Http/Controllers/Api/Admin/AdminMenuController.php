@@ -49,10 +49,18 @@ class AdminMenuController extends Controller
 
     public function route()
     {
-        $list = AdminMenu::query()
-            ->orderBy('sort')
-            ->where('status', 1)
-            ->get();
+        $adminUser = auth('admin')->user();
+        if ($adminUser->is_super_admin) {
+            $list = AdminMenu::query()
+                ->orderBy('sort')
+                ->where('status', 1)
+                ->get();
+        } else {
+            $list = $adminUser->adminRoles->flatMap(function ($role) {
+                return $role->menus;
+            })->sort()->where('status', 1)->values();
+        }
+
         return $this->success($this->getRouteTree($list));
     }
 
