@@ -20,7 +20,6 @@ class CreateAdminMenusTable extends Migration
             $table->integer('type')->comment('1-菜单 2-按钮');
             $table->string('path')->nullable();
             $table->string('name')->nullable();
-            $table->string('component')->nullable();
             $table->string('icon')->nullable();
             $table->integer('ignoreCache')->nullable();
             $table->integer('hideInMenu')->nullable();

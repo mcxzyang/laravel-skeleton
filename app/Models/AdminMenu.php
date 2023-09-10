@@ -10,7 +10,7 @@ class AdminMenu extends Model
     use FormatDate;
 
     protected $fillable = [
-        'title', 'pid', 'type', 'path', 'name', 'component', 'icon', 'ignoreCache', 'hideInMenu', 'permission', 'sort',
+        'title', 'pid', 'type', 'path', 'name', 'icon', 'ignoreCache', 'hideInMenu', 'permission', 'sort',
         'status'
     ];
 
