@@ -10,9 +10,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Jobs\RequestLogJob;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RequestLogMiddleware
 {
@@ -23,14 +23,23 @@ class RequestLogMiddleware
         $response = $next($request);
 
         if ($environment === 'production') {
-            dispatch(new RequestLogJob([
+//            dispatch(new RequestLogJob([
+//                'url' => $request->fullUrl(),
+//                'method' => $request->method(),
+//                'ip' => $request->getClientIp(),
+//                'params' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
+//                'response_params' => $response->getContent(),
+//                'user_id' => $request->user() ? $request->user()->id : 0,
+//            ]));
+            $arr = [
                 'url' => $request->fullUrl(),
                 'method' => $request->method(),
                 'ip' => $request->getClientIp(),
                 'params' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
-                'response_params' => $response->getContent(),
+                'http_code' => $response->getStatusCode(),
                 'user_id' => $request->user() ? $request->user()->id : 0,
-            ]));
+            ];
+            Log::channel('request')->info(null, $arr);
         }
         return $response;
     }
