@@ -2,13 +2,17 @@
 
 namespace App\Exceptions;
 
+use App\Http\Controllers\Api\Traits\ApiResponseTraits;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    use ApiResponseTraits;
     /**
      * A list of the exception types that are not reported.
      *
@@ -45,7 +49,19 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (AccessDeniedHttpException $e) {
-            throw new InvalidRequestException('权限错误');
+            return $this->failed('权限错误', 403);
+        });
+
+        $this->renderable(function (AuthenticationException $e) {
+            return $this->failed('未授权', 401);
+        });
+
+        $this->renderable(function (NotFoundHttpException $e) {
+            return $this->failed('资源不存在', 404);
+        });
+
+        $this->renderable(function (Throwable $e) {
+            return $this->failed('服务器错误', 500);
         });
     }
 }

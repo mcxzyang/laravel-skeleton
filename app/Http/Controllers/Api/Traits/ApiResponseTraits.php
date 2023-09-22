@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Traits;
 
+use App\Http\Resources\Collections\BaseResourceCollection;
 use Response;
 use Symfony\Component\HttpFoundation\Response as FoundationResponse;
 
@@ -39,6 +40,9 @@ trait ApiResponseTraits
 
     public function success($data, $status = "success")
     {
+        if ($data instanceof BaseResourceCollection) {
+            $data = $data->response()->getData(true);
+        }
         return $this->status($status, compact('data'));
     }
 

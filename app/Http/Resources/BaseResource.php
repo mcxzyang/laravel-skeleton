@@ -37,7 +37,7 @@ class BaseResource extends JsonResource
 
     public static function collection($resource)
     {
-        return tap(new BaseResourceCollection($resource), function ($collection) {
+        return tap(new BaseResourceCollection($resource, static::class), function ($collection) {
             if (property_exists(static::class, 'preserveKeys')) {
                 $collection->preserveKeys = (new static([]))->preserveKeys === true;
             }

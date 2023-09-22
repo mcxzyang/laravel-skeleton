@@ -2,36 +2,24 @@
 
 namespace App\Http\Resources\Collections;
 
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class BaseResourceCollection extends ResourceCollection
+class BaseResourceCollection extends AnonymousResourceCollection
 {
-    private $total;
+    public static $wrap = 'list';
 
-    public function __construct($resource)
+    public function paginationInformation($request, $paginated, $default): array
     {
-        if (!request()->has('paging') || request('paging') > 0) {
-            $this->total = $resource->total();
-        }
-
-        parent::__construct($resource);
-    }
-
-    /**
-     * Transform the resource collection into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return array
-     */
-    public function toArray($request)
-    {
-        if (!request()->has('paging') || request('paging') > 0) {
-            return [
-                'list' => $this->collection,
-                'total' => $this->total
-            ];
-        }
-        return parent::toArray($request);
+        return [
+            'pagination' => [
+                // 'currentPage' => $paginated['current_page'],
+                // 'from' => $paginated['from'],
+                // 'lastPage' => $paginated['last_page'],
+                // 'perPage' => $paginated['per_page'],
+                // 'to' => $paginated['to'],
+                'total' => $paginated['total'],
+            ]
+        ];
     }
 }

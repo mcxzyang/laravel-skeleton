@@ -16,7 +16,6 @@ Route::post('/tools/uploadPic', [ToolsController::class, 'uploadPic']);
 
 Route::get('/common/captcha/img', [CommonController::class, 'captcha']);
 
-
 Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
@@ -35,7 +34,6 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/adminMenu/list/route', [AdminMenuController::class, 'route']);
 
     Route::resource('/adminUser', AdminUserController::class);
-
     Route::resource('/adminRole', AdminRoleController::class);
 
 });

@@ -9,6 +9,8 @@ use App\Models\AdminUser;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
+use function PHPSTORM_META\type;
+
 class AdminUserController extends Controller
 {
     public function index(Request $request)
@@ -17,6 +19,7 @@ class AdminUserController extends Controller
         $query = AdminUser::filter($request->all())->orderBy('id', 'desc');
         $list = $paging ? $query->paginate($request->get('size', config('app.size'))) : $query->get();
         return $this->success(AdminUserResource::collection($list));
+        // return $this->success(AdminUserResource::collection($list));
     }
 
     public function show(AdminUser $adminUser)
