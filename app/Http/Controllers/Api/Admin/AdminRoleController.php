@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AdminRoleResource;
 use App\Models\AdminRole;
-use App\Models\AdminRoleMenus;
+use App\Models\AdminRoleMenu;
 use Illuminate\Http\Request;
 
 class AdminRoleController extends Controller
@@ -53,7 +53,7 @@ class AdminRoleController extends Controller
 
     public function destroy(AdminRole $adminRole)
     {
-        AdminRoleMenus::query()->where('role_id', $adminRole->id)->delete();
+        AdminRoleMenu::query()->where('role_id', $adminRole->id)->delete();
         $adminRole->delete();
 
         return $this->message('操作成功');
