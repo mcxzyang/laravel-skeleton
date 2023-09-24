@@ -9,8 +9,6 @@ use App\Models\AdminUser;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
-use function PHPSTORM_META\type;
-
 class AdminUserController extends Controller
 {
     public function index(Request $request)
