@@ -15,11 +15,8 @@ class AdminUserController extends Controller
 {
     public function index(Request $request)
     {
-        $paging = $request->input('paging', 1);
-        $query = AdminUser::filter($request->all())->orderBy('id', 'desc');
-        $list = $paging ? $query->paginate($request->get('size', config('app.size'))) : $query->get();
-        return $this->success(AdminUserResource::collection($list));
-        // return $this->success(AdminUserResource::collection($list));
+        $list = AdminUser::filter($request->all())->orderBy('id', 'desc')->paginateOrGet();
+        return $this->success(AdminUserResource::collection($list)->hide(['updated_at']));
     }
 
     public function show(AdminUser $adminUser)

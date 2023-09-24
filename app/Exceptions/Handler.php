@@ -61,7 +61,8 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (Throwable $e) {
-            return $this->failed('服务器错误', 500);
+            $environment = app()->environment();
+            return $this->failed($environment === 'production' ? '服务器错误' : $e->getMessage(), 500);
         });
     }
 }

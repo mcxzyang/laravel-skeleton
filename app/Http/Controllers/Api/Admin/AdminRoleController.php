@@ -12,9 +12,7 @@ class AdminRoleController extends Controller
 {
     public function index(Request $request)
     {
-        $paging = $request->input('paging', 1);
-        $query = AdminRole::filter($request->all())->orderBy('id', 'desc');
-        $list = $paging ? $query->paginate($request->get('size', config('app.size'))) : $query->get();
+        $list = AdminRole::filter($request->all())->orderBy('id', 'desc')->paginateOrGet();
         return $this->success(AdminRoleResource::collection($list));
     }
 
